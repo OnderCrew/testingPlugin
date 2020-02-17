@@ -1,0 +1,11 @@
+name: TestingPlugin
+version: ${project.version}
+main: xyz.ondercrew.testingplugin.TestingPlugin
+api-version: 1.13
+authors: [OnderCrew, PMH]
+description: PMH's Minecraft Bukkit Plugin Tester
+website: https://github.com/OnderCrew/testingPlugin
+commands:
+  twitch:
+    description: 특정 트위치 스트리머의 정보를 확인합니다
+    usage: /twitch <트위치ID>
