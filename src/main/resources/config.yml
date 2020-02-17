@@ -3,3 +3,6 @@ twitch:
   clientId: CHANGEME
 nickname:
   enable: true
+  force:
+    onder_sky: 온더
+    TritiumNetworks: 개발자
