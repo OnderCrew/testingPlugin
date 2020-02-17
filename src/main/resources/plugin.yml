@@ -9,3 +9,6 @@ commands:
   twitch:
     description: 특정 트위치 스트리머의 정보를 확인합니다
     usage: /twitch <트위치ID>
+  nick:
+    description: 자신의 닉네임을 설정합니다
+    usage: /nick <닉네임>

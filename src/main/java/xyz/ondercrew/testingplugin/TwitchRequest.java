@@ -20,9 +20,6 @@ public class TwitchRequest {
             if (channelInfo.success && streamInfo.success) {
                 boolean isStreaming = !streamInfo.result.isNull("stream");
                 if (isStreaming) streamInfo = new SuccessAndResult(streamInfo.result.getJSONObject("stream"));
-                System.out.println(twitchId.result);
-                System.out.println(channelInfo.result);
-                System.out.println(streamInfo.result);
                 String str = ChatColor.LIGHT_PURPLE + "\n" + ChatColor.BOLD + channelInfo.result.getString("display_name") + "\n"
                             + ChatColor.RESET + ChatColor.WHITE + channelInfo.result.getString("description") + "\n====================\n"
                             + (isStreaming ? ChatColor.GREEN + "방송중: " : ChatColor.GRAY + "방송 오프라인: ") + (channelInfo.result.isNull("status") ?

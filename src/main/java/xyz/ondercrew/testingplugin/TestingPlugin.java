@@ -11,5 +11,6 @@ public class TestingPlugin extends JavaPlugin {
         this.saveConfig();
 
         this.getCommand("twitch").setExecutor(new CommandHandler());
+        this.getCommand("nick").setExecutor(new CommandHandler());
     }
 }
