@@ -1,6 +1,7 @@
 package xyz.ondercrew.testingplugin;
 
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.json.JSONObject;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -11,8 +12,18 @@ import org.apache.http.util.EntityUtils;
 import org.bukkit.command.CommandSender;
 
 public class TwitchRequest {
+    private FileConfiguration configFile = TestingPlugin.getPlugin(TestingPlugin.class).getConfig();
+
     private final CloseableHttpClient httpClient = HttpClients.createDefault();
     public boolean TwitchCommand (CommandSender sender, String[] args) {
+        if (!configFile.getBoolean("twitch.enable")) {
+            sender.sendMessage("설정파일에서 Twitch 명령어의 사용을 금지하고 있습니다");
+            return true;
+        } else if (!configFile.isString("twitch.clientId")) {
+            sender.sendMessage("설정파일이 완성되지 않았습니다");
+            return true;
+        }
+
         SuccessAndResult twitchId = getUserInfoByUserName(args[0]);
         if (twitchId.success) {
             SuccessAndResult channelInfo = getInfoById("channels", twitchId.result.getString("_id"));
@@ -42,7 +53,7 @@ public class TwitchRequest {
     private SuccessAndResult getUserInfoByUserName (String username) {
         HttpGet username2idRequest = new HttpGet("https://api.twitch.tv/kraken/users?login=" + username);
         username2idRequest.addHeader("Accept", "application/vnd.twitchtv.v5+json");
-        username2idRequest.addHeader("Client-ID", System.getenv("twitchClient")); // TODO config 파일로 트위치 클라ID 받게 바꾸기 = [1]
+        username2idRequest.addHeader("Client-ID", configFile.getString("twitch.clientId"));
 
         try (CloseableHttpResponse res = httpClient.execute(username2idRequest)) {
             JSONObject resObj = new JSONObject(EntityUtils.toString(res.getEntity()));
@@ -58,7 +69,7 @@ public class TwitchRequest {
     private SuccessAndResult getInfoById (String type, String id) {
         HttpGet username2idRequest = new HttpGet("https://api.twitch.tv/kraken/" + type + "/" + id);
         username2idRequest.addHeader("Accept", "application/vnd.twitchtv.v5+json");
-        username2idRequest.addHeader("Client-ID", System.getenv("twitchClient")); // TODO [1]
+        username2idRequest.addHeader("Client-ID", configFile.getString("twitch.clientId"));
 
         try (CloseableHttpResponse res = httpClient.execute(username2idRequest)) {
             JSONObject result = new JSONObject(EntityUtils.toString(res.getEntity()));
